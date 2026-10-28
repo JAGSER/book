@@ -84,6 +84,7 @@ button.busy::after{content:"";position:absolute;inset:0;margin:auto;width:14px;h
 .row{display:flex;flex-wrap:wrap;gap:7px;align-items:center}
 input[type=text],select,textarea{font:inherit;color:var(--ink);background:var(--paper);border:2px solid var(--line);border-radius:14px;padding:8px 12px;min-width:0}
 input[type=text]{flex:1}
+#voiceShort{flex:1 1 170px}
 textarea{width:100%;resize:vertical;line-height:1.55}
 .voice-desc{font-size:13.5px;min-height:70px}
 
@@ -109,6 +110,9 @@ textarea{width:100%;resize:vertical;line-height:1.55}
 .keyrow{flex:1;min-width:260px}
 .keybox.ok{background:color-mix(in srgb,var(--mint-soft) 60%,var(--paper));border-color:color-mix(in srgb,var(--mint) 45%,var(--line))}
 .copy-final{align-self:flex-start}
+.langsw{display:inline-flex;border:2px solid var(--line);border-radius:999px;background:var(--paper);padding:3px;gap:2px;align-self:flex-start}
+.langsw button{border:0;padding:6px 12px;background:transparent}
+.langsw button[aria-pressed="true"]{background:var(--berry);color:#fff}
 .toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(20px);opacity:0;
   background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-weight:700;font-size:14px;transition:.2s;pointer-events:none;max-width:calc(100% - 32px);text-align:center;z-index:20}
 .toast.show{opacity:1;transform:translateX(-50%)}
@@ -121,80 +125,80 @@ textarea{width:100%;resize:vertical;line-height:1.55}
   <header>
     <div>
       <h1><span class="sunmark"></span>Storybook Splitter</h1>
-      <p class="lede">Drop a Gemini storybook PDF. Every page splits into its picture and its text, ready to copy. Text tools turn each page into a 10-second Veo prompt.</p>
+      <p class="lede" data-i18n="lede">Drop a Gemini storybook PDF. Every page splits into its picture and its text, ready to copy. Text tools turn each page into a 10-second Veo prompt.</p>
+    </div>
+    <div class="langsw" role="group" aria-label="Language">
+      <button id="langEn" data-lang="en" aria-pressed="true">EN</button>
+      <button id="langRu" data-lang="ru" aria-pressed="false">RU</button>
     </div>
   </header>
 
   <section class="panel keybox" id="keyBox" aria-labelledby="keyH">
     <div class="grow">
-      <h2 id="keyH" style="font-size:18px">Claude API key</h2>
+      <h2 id="keyH" style="font-size:18px" data-i18n="keyTitle">Claude API key</h2>
       <p class="lede" id="keyState" style="margin-top:2px;font-size:14px">Text reading, shortening, voice and translation run on Claude Haiku with your key. The key stays in this browser and goes only to Anthropic.</p>
     </div>
     <div class="row keyrow">
       <input type="password" id="apiKey" placeholder="sk-ant-..." autocomplete="off" spellcheck="false" aria-label="Claude API key">
-      <button class="primary" id="keySave">Save key</button>
-      <button id="keyForget" hidden>Remove</button>
+      <button class="primary" id="keySave" data-i18n="saveKey">Save key</button>
+      <button id="keyForget" hidden data-i18n="remove">Remove</button>
     </div>
   </section>
 
   <label class="panel drop" id="drop" for="file">
     <div class="grow">
-      <div class="big">Drop your storybook PDF here</div>
-      <p id="dropHint">or click to choose a file. Large files (200+ MB) take a minute to open.</p>
+      <div class="big" data-i18n="dropBig">Drop your storybook PDF here</div>
+      <p id="dropHint" data-i18n="dropHint">or click to choose a file. Large files (200+ MB) take a minute to open.</p>
       <div class="progress" id="prog" hidden><i></i></div>
     </div>
-    <span class="btn primary">Choose PDF</span>
+    <span class="btn primary" data-i18n="choosePdf">Choose PDF</span>
     <input id="file" type="file" accept="application/pdf,.pdf" hidden>
   </label>
 
   <section class="panel" id="allTools" aria-labelledby="allH">
-    <h2 id="allH" style="margin-bottom:12px">For all pages</h2>
+    <h2 id="allH" style="margin-bottom:12px" data-i18n="forAll">For all pages</h2>
     <div class="toolbar">
       <div class="tool">
-        <span class="label">Length &amp; format</span>
+        <span class="label" data-i18n="lenFormat">Length &amp; format</span>
         <div class="row">
-          <button class="ai" id="shortAll">Shorten all to 10 s</button>
-          <button class="chip" id="veoAll" aria-pressed="false">/veo template</button>
+          <button class="ai" id="shortAll" data-i18n="shortAll">Shorten all to 10 s</button>
+          <button class="chip" id="veoAll" aria-pressed="false" data-i18n="veoTpl">/veo template</button>
         </div>
       </div>
       <div class="tool">
-        <span class="label">Add before text</span>
+        <span class="label" data-i18n="addBefore">Add before text</span>
         <div class="row">
-          <button class="chip" data-all="noNarrator" aria-pressed="false">no narrator</button>
-          <button class="chip" data-all="noMusic" aria-pressed="false">no music</button>
-          <button class="chip" data-all="manyScenes" aria-pressed="false">many scenes</button>
+          <button class="chip" data-all="noNarrator" aria-pressed="false" data-i18n="noNarrator">no narrator</button>
+          <button class="chip" data-all="noMusic" aria-pressed="false" data-i18n="noMusic">no music</button>
+          <button class="chip" data-all="manyScenes" aria-pressed="false" data-i18n="manyScenes">many scenes</button>
         </div>
       </div>
       <div class="tool">
-        <span class="label">Narrator voice (same everywhere)</span>
+        <span class="label" data-i18n="narrator">Narrator voice (same everywhere)</span>
         <div class="row">
-          <input type="text" id="voiceShort" placeholder="e.g. child's voice, warm grandma" aria-label="Short voice idea">
-          <button class="ai" id="voiceGo">Describe &amp; add</button>
+          <input type="text" id="voiceShort" placeholder="e.g. child's voice, warm grandma" data-i18n-ph="voicePh" aria-label="Short voice idea">
+          <button class="ai" id="voiceGo" data-i18n="voiceGo">Describe &amp; add</button>
         </div>
-        <textarea id="voiceDesc" class="voice-desc" rows="3" placeholder="The detailed voice description appears here. You can edit it." hidden></textarea>
-        <div class="row" id="voiceRow" hidden><button class="chip" id="voiceAll" aria-pressed="false">voiceover on all pages</button></div>
+        <textarea id="voiceDesc" class="voice-desc" rows="3" placeholder="The detailed voice description appears here. You can edit it." data-i18n-ph="voiceDescPh" hidden></textarea>
+        <div class="row" id="voiceRow" hidden><button class="chip" id="voiceAll" aria-pressed="false" data-i18n="voiceAll">voiceover on all pages</button></div>
       </div>
       <div class="tool">
-        <span class="label">Translate</span>
+        <span class="label" data-i18n="translateLbl">Translate</span>
         <div class="row">
-          <select id="lang" aria-label="Target language">
-            <option>English</option><option>Russian</option><option>Malay</option><option>Indonesian</option><option>Spanish</option>
-            <option>Portuguese</option><option>French</option><option>German</option><option>Italian</option><option>Turkish</option>
-            <option>Kazakh</option><option>Ukrainian</option><option>Chinese</option><option>Japanese</option><option>Korean</option><option>Arabic</option><option>Hindi</option>
-          </select>
-          <button class="ai" id="trAll">Translate all</button>
+          <select id="lang" aria-label="Target language"></select>
+          <button class="ai" id="trAll" data-i18n="trAll">Translate all</button>
         </div>
-        <div class="row"><button id="copyAll">Copy all prompts</button><button id="undoAll">Restore original texts</button></div>
+        <div class="row"><button id="copyAll" data-i18n="copyAll">Copy all prompts</button><button id="undoAll" data-i18n="undoAll">Restore original texts</button></div>
       </div>
     </div>
   </section>
 
   <section class="pages" id="pages" aria-label="Book pages">
-    <div class="panel empty" id="emptyBook"><div class="big">No book yet</div>Your pages appear here as picture + text pairs.</div>
+    <div class="panel empty" id="emptyBook"><div class="big" data-i18n="noBook">No book yet</div><span data-i18n="noBookText">Your pages appear here as picture + text pairs.</span></div>
   </section>
 
   <section aria-labelledby="ownH" style="display:flex;flex-direction:column;gap:12px">
-    <h2 id="ownH">Your own text</h2>
+    <h2 id="ownH" data-i18n="ownText">Your own text</h2>
     <div id="own"></div>
   </section>
 </div>
@@ -210,6 +214,76 @@ let voiceDesc = "";
 let sample = null;
 const G = {veo:false, voice:false, p:{noNarrator:false,noMusic:false,manyScenes:false}};
 
+/* ---------- language ---------- */
+const T = {
+en:{lede:"Drop a Gemini storybook PDF. Every page splits into its picture and its text, ready to copy. Text tools turn each page into a 10-second Veo prompt.",
+ keyTitle:"Claude API key",saveKey:"Save key",remove:"Remove",
+ keyOff:"Text reading, shortening, voice and translation run on Claude Haiku with your key. The key stays in this browser and goes only to Anthropic.",
+ keyOn:"Key saved in this browser. Haiku reads the texts and runs the buttons with it.",keySaved:"Saved: sk-ant-…",
+ dropBig:"Drop your storybook PDF here",dropHint:"or click to choose a file. Large files (200+ MB) take a minute to open.",choosePdf:"Choose PDF",
+ forAll:"For all pages",lenFormat:"Length & format",shortAll:"Shorten all to 10 s",veoTpl:"/veo template",addBefore:"Add before text",
+ noNarrator:"no narrator",noMusic:"no music",manyScenes:"many scenes",narrator:"Narrator voice (same everywhere)",
+ voicePh:"e.g. child's voice, warm grandma",voiceGo:"Describe & add",voiceDescPh:"The detailed voice description appears here. You can edit it.",
+ voiceAll:"voiceover on all pages",translateLbl:"Translate",trAll:"Translate all",copyAll:"Copy all prompts",undoAll:"Restore original texts",
+ noBook:"No book yet",noBookText:"Your pages appear here as picture + text pairs.",ownText:"Your own text",
+ cover:"Cover",page:"Page {n}",own:"Paste any text",example:"Example, replace with yours",
+ copyPic:"Copy picture",download:"Download",copyText:"Copy text",short10:"Shorten to 10 s",translateBtn:"Translate",original:"Original",
+ voiceChip:"narrator voice",voiceChipTitle:"Describe a narrator voice above first",whatCopied:"What gets copied",copyPrompt:"Copy prompt",
+ finalEmpty:"Text will appear here",reading:"Reading text from the page…",meta:"{w} words · about {s} s read aloud",over10:" · longer than 10 s",
+ textCopied:"Text copied",copyBlocked:"Copy blocked here. Text is selected, press Ctrl+C",picCopied:"Picture copied",
+ picBlocked:"Right-click the picture and choose Copy image",saveFail:"Couldn't save. Right-click the picture and choose Save image",
+ noText:"No text on this card yet",restored:"Original texts restored",loadFirst:"Load a book first",noTexts:"No texts yet",done:"Done",
+ voiceFirst:"Type a short voice idea first, like “child's voice”",voiceAdded:"Voice added to all texts",pdfFail:"PDF reader didn't load. Reload the page",
+ opening:"Opening {name}…",splitting:"Splitting page {i} of {n}…",badPdf:"This file couldn't be opened as a PDF. Try exporting the book again.",
+ splitDone:"{n} pages split. Texts are being read by Claude Haiku.",
+ keyPaste:"Paste your key first",keyFormat:"A Claude key starts with sk-ant-",keyWorks:"Key works and is saved",keyRemoved:"Key removed from this browser",
+ e_not_granted:"Claude access was not allowed for this page",e_rate_limited:"Too many requests. Wait a little and try again",
+ e_sampling_disabled:"Claude isn't available on this account",e_session_expired:"Sign in to Claude again",e_refused:"Claude declined this text",
+ e_image_rejected:"Claude couldn't read this picture",e_images_unavailable:"Picture reading isn't available here",
+ e_unavailable:"Add your Claude API key at the top first",e_bad_key:"The API key doesn't work. Check it at the top",e_no_credit:"Your API balance is empty",
+ e_overloaded:"Claude is busy right now. Try again in a minute",e_network:"No connection to Claude. Check the internet",
+ e_invalid_json:"Claude answered in a wrong format. Try again",e_other:"Claude didn't answer. Try again"},
+ru:{lede:"Загрузите PDF-книгу из Gemini. Каждая страница раскладывается на картинку и текст, готовые к копированию. Кнопки для текста превращают каждую страницу в 10-секундный промпт для Veo.",
+ keyTitle:"API-ключ Claude",saveKey:"Сохранить ключ",remove:"Удалить",
+ keyOff:"Распознавание текста, сокращение, голос и перевод работают на Claude Haiku с вашим ключом. Ключ хранится только в этом браузере и уходит только в Anthropic.",
+ keyOn:"Ключ сохранён в этом браузере. Haiku с ним читает тексты и выполняет команды кнопок.",keySaved:"Сохранён: sk-ant-…",
+ dropBig:"Перетащите сюда PDF-книгу",dropHint:"или нажмите, чтобы выбрать файл. Большие файлы (200+ МБ) открываются около минуты.",choosePdf:"Выбрать PDF",
+ forAll:"Для всех страниц",lenFormat:"Длина и формат",shortAll:"Сократить все до 10 с",veoTpl:"шаблон /veo",addBefore:"Добавить перед текстом",
+ noNarrator:"без диктора",noMusic:"без музыки",manyScenes:"много сцен",narrator:"Голос диктора (одинаковый везде)",
+ voicePh:"например, детский голос, тёплая бабушка",voiceGo:"Описать и добавить",voiceDescPh:"Здесь появится подробное описание голоса. Его можно поправить.",
+ voiceAll:"закадровый голос на всех страницах",translateLbl:"Перевод",trAll:"Перевести все",copyAll:"Скопировать все промпты",undoAll:"Вернуть исходные тексты",
+ noBook:"Книги пока нет",noBookText:"Здесь появятся страницы: картинка и текст рядом.",ownText:"Свой текст",
+ cover:"Обложка",page:"Страница {n}",own:"Вставьте любой текст",example:"Пример, замените своим",
+ copyPic:"Копировать картинку",download:"Скачать",copyText:"Копировать текст",short10:"Сократить до 10 с",translateBtn:"Перевести",original:"Исходный",
+ voiceChip:"голос диктора",voiceChipTitle:"Сначала опишите голос диктора выше",whatCopied:"Что будет скопировано",copyPrompt:"Копировать промпт",
+ finalEmpty:"Здесь появится текст",reading:"Читаю текст со страницы…",meta:"{w} сл. · примерно {s} с вслух",over10:" · дольше 10 с",
+ textCopied:"Текст скопирован",copyBlocked:"Копирование заблокировано. Текст выделен, нажмите Ctrl+C",picCopied:"Картинка скопирована",
+ picBlocked:"Нажмите на картинку правой кнопкой и выберите «Копировать картинку»",saveFail:"Не удалось сохранить. Нажмите на картинку правой кнопкой и выберите «Сохранить картинку»",
+ noText:"На этой карточке пока нет текста",restored:"Исходные тексты возвращены",loadFirst:"Сначала загрузите книгу",noTexts:"Текстов пока нет",done:"Готово",
+ voiceFirst:"Сначала коротко опишите голос, например «детский голос»",voiceAdded:"Голос добавлен во все тексты",pdfFail:"Не загрузилась программа для PDF. Обновите страницу",
+ opening:"Открываю {name}…",splitting:"Разбираю страницу {i} из {n}…",badPdf:"Этот файл не открывается как PDF. Попробуйте выгрузить книгу заново.",
+ splitDone:"Страниц разобрано: {n}. Claude Haiku читает тексты.",
+ keyPaste:"Сначала вставьте ключ",keyFormat:"Ключ Claude начинается с sk-ant-",keyWorks:"Ключ работает и сохранён",keyRemoved:"Ключ удалён из этого браузера",
+ e_not_granted:"Доступ к Claude для этой страницы не разрешён",e_rate_limited:"Слишком много запросов. Подождите немного и попробуйте снова",
+ e_sampling_disabled:"Claude недоступен для этого аккаунта",e_session_expired:"Войдите в Claude заново",e_refused:"Claude отказался обрабатывать этот текст",
+ e_image_rejected:"Claude не смог прочитать эту картинку",e_images_unavailable:"Чтение картинок здесь недоступно",
+ e_unavailable:"Сначала добавьте API-ключ Claude вверху",e_bad_key:"API-ключ не работает. Проверьте его вверху",e_no_credit:"На балансе API закончились деньги",
+ e_overloaded:"Claude сейчас перегружен. Попробуйте через минуту",e_network:"Нет связи с Claude. Проверьте интернет",
+ e_invalid_json:"Claude ответил в неверном формате. Попробуйте снова",e_other:"Claude не ответил. Попробуйте снова"}
+};
+const LANGS = [["English","Английский"],["Russian","Русский"],["Malay","Малайский"],["Indonesian","Индонезийский"],["Spanish","Испанский"],
+  ["Portuguese","Португальский"],["French","Французский"],["German","Немецкий"],["Italian","Итальянский"],["Turkish","Турецкий"],
+  ["Kazakh","Казахский"],["Ukrainian","Украинский"],["Chinese","Китайский"],["Japanese","Японский"],["Korean","Корейский"],["Arabic","Арабский"],["Hindi","Хинди"]];
+let UI = "en";
+try{ UI = localStorage.getItem("uiLang") || ((navigator.language||"").toLowerCase().startsWith("ru") ? "ru" : "en"); }catch(e){}
+if(!T[UI]) UI = "en";
+function tx(k, v){ let s = (T[UI][k] ?? T.en[k] ?? k); if(v) for(const x in v) s = s.split("{"+x+"}").join(v[x]); return s; }
+function applyLang(root){
+  (root||document).querySelectorAll("[data-i18n]").forEach(el => { el.textContent = tx(el.dataset.i18n, {n: el.dataset.n}); });
+  (root||document).querySelectorAll("[data-i18n-ph]").forEach(el => { el.placeholder = tx(el.dataset.i18nPh); });
+  (root||document).querySelectorAll("[data-i18n-title]").forEach(el => { el.title = tx(el.dataset.i18nTitle); });
+}
+
 /* ---------- toast & clipboard ---------- */
 let tt;
 function toast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");clearTimeout(tt);tt=setTimeout(()=>t.classList.remove("show"),2600);}
@@ -220,33 +294,29 @@ function copyText(text, ta){
     document.body.appendChild(t); t.select(); let ok = false;
     try{ ok = document.execCommand("copy"); }catch(e){}
     t.remove();
-    if(ok) toast("Text copied");
-    else { if(ta){ta.focus();ta.select();} toast("Copy blocked here. Text is selected, press Ctrl+C"); }
+    if(ok) toast(tx("textCopied"));
+    else { if(ta){ta.focus();ta.select();} toast(tx("copyBlocked")); }
   };
-  if(navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(()=>toast("Text copied"), fallback);
+  if(navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(()=>toast(tx("textCopied")), fallback);
   else fallback();
 }
 function copyImage(blob){
-  if(!(navigator.clipboard && window.isSecureContext && window.ClipboardItem)) return toast("Right-click the picture and choose Copy image");
+  if(!(navigator.clipboard && window.isSecureContext && window.ClipboardItem)) return toast(tx("picBlocked"));
   try{
     const item = new ClipboardItem({"image/png": blob});
-    navigator.clipboard.write([item]).then(()=>toast("Picture copied"),()=>toast("Copy blocked here. Right-click the picture and choose Copy image"));
-  }catch(e){toast("Copy blocked here. Right-click the picture and choose Copy image");}
+    navigator.clipboard.write([item]).then(()=>toast(tx("picCopied")),()=>toast(tx("picBlocked")));
+  }catch(e){toast(tx("picBlocked"));}
 }
 let downloads = null;
 async function saveImage(blob, name){
   if(!downloads){ const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),4000); return; }
-  try{await downloads.save({filename:name, data:blob});}catch(e){ if(e&&e.code!=="declined"&&e.code!=="cancelled") toast("Couldn't save. Right-click the picture → Save image"); }
+  try{await downloads.save({filename:name, data:blob});}catch(e){ if(e&&e.code!=="declined"&&e.code!=="cancelled") toast(tx("saveFail")); }
 }
 
 /* ---------- Claude Haiku ---------- */
 function errText(e){
   const c = e && e.code;
-  return ({not_granted:"Claude access was not allowed for this page",rate_limited:"Too many requests. Wait a little and try again",
-    sampling_disabled:"Claude isn't available on this account",session_expired:"Sign in to Claude again",refused:"Claude declined this text",
-    image_rejected:"Claude couldn't read this picture",images_unavailable:"Picture reading isn't available here",
-    unavailable:"Add your Claude API key at the top first",bad_key:"The API key doesn't work. Check it at the top",no_credit:"Your API balance is empty",
-    overloaded:"Claude is busy right now. Try again in a minute",network:"No connection to Claude. Check the internet",invalid_json:"Claude answered in a wrong format. Try again"})[c] || "Claude didn't answer. Try again";
+  return T.en["e_"+c] ? tx("e_"+c) : tx("e_other");
 }
 let apiKey = "";
 try{ apiKey = localStorage.getItem("claudeKey") || ""; }catch(e){}
@@ -308,35 +378,36 @@ function compose(c){
 const words = t => (t.trim().match(/\S+/g)||[]).length;
 
 /* ---------- card UI ---------- */
-function makeCard({index, label, blob, text, example}){
-  const c = {index, label, blob, text:text||"", original:text||"", p:{noNarrator:false,noMusic:false,manyScenes:false}, veo:false, voice:false, el:null};
+function makeCard({index, labelKey, blob, text, example}){
+  const c = {index, labelKey, blob, text:text||"", original:text||"", p:{noNarrator:false,noMusic:false,manyScenes:false}, veo:false, voice:false, el:null};
   const el = document.createElement("article");
   el.className = "panel spread" + (blob ? "" : " noimg");
   const imgName = `page-${String(index).padStart(2,"0")}.png`;
   el.innerHTML = `
-    ${blob ? `<div class="pic"><img alt="${label} picture"><div class="row"><button data-a="cimg">Copy picture</button><button data-a="simg">Download</button></div></div>` : ""}
+    ${blob ? `<div class="pic"><img alt=""><div class="row"><button data-a="cimg" data-i18n="copyPic">Copy picture</button><button data-a="simg" data-i18n="download">Download</button></div></div>` : ""}
     <div class="side">
-      <div class="pagehead"><h3>${label}</h3>${example?'<span class="ex">Example, replace with yours</span>':""}</div>
-      <textarea rows="5" aria-label="${label} text" id="t-${index}"></textarea>
+      <div class="pagehead"><h3 data-i18n="${labelKey}" data-n="${index}"></h3>${example?'<span class="ex" data-i18n="example"></span>':""}</div>
+      <textarea rows="5" id="t-${index}"></textarea>
       <div class="meta"></div>
       <div class="row">
-        <button data-a="copytext" class="primary">Copy text</button>
-        <button data-a="short" class="ai">Shorten to 10 s</button>
-        <button data-a="tr" class="ai">Translate</button>
-        <button data-a="orig">Original</button>
+        <button data-a="copytext" class="primary" data-i18n="copyText">Copy text</button>
+        <button data-a="short" class="ai" data-i18n="short10">Shorten to 10 s</button>
+        <button data-a="tr" class="ai" data-i18n="translateBtn">Translate</button>
+        <button data-a="orig" data-i18n="original">Original</button>
       </div>
       <div class="row">
-        <button class="chip" data-t="veo" aria-pressed="false">/veo template</button>
-        <button class="chip" data-p="noNarrator" aria-pressed="false">no narrator</button>
-        <button class="chip" data-p="noMusic" aria-pressed="false">no music</button>
-        <button class="chip" data-p="manyScenes" aria-pressed="false">many scenes</button>
-        <button class="chip" data-t="voice" aria-pressed="false" disabled title="Describe a narrator voice above first">narrator voice</button>
+        <button class="chip" data-t="veo" aria-pressed="false" data-i18n="veoTpl">/veo template</button>
+        <button class="chip" data-p="noNarrator" aria-pressed="false" data-i18n="noNarrator">no narrator</button>
+        <button class="chip" data-p="noMusic" aria-pressed="false" data-i18n="noMusic">no music</button>
+        <button class="chip" data-p="manyScenes" aria-pressed="false" data-i18n="manyScenes">many scenes</button>
+        <button class="chip" data-t="voice" aria-pressed="false" disabled data-i18n="voiceChip" data-i18n-title="voiceChipTitle">narrator voice</button>
       </div>
-      <div class="final-h"><span class="label">What gets copied</span></div>
+      <div class="final-h"><span class="label" data-i18n="whatCopied">What gets copied</span></div>
       <div class="final"></div>
-      <button data-a="copy" class="primary copy-final">Copy prompt</button>
+      <button data-a="copy" class="primary copy-final" data-i18n="copyPrompt">Copy prompt</button>
     </div>`;
   c.el = el;
+  applyLang(el);
   const ta = el.querySelector("textarea");
   ta.value = c.text;
   if(blob){ el.querySelector("img").src = URL.createObjectURL(blob); }
@@ -352,7 +423,7 @@ function makeCard({index, label, blob, text, example}){
     if(a==="simg") return saveImage(c.blob, imgName);
     if(a==="orig"){ c.text = c.original; return refresh(c,true); }
     if(a==="short"||a==="tr"){
-      if(!c.text.trim()) return toast("No text on this card yet");
+      if(!c.text.trim()) return toast(tx("noText"));
       b.classList.add("busy"); b.disabled = true;
       try{
         c.text = await ask(a==="short" ? shortenP(c.text) : translateP(c.text, $("#lang").value), {cache:false});
@@ -373,11 +444,11 @@ function refresh(c, syncText){
   vb.disabled = !voiceDesc.trim(); vb.setAttribute("aria-pressed", c.voice && !!voiceDesc.trim());
   const w = words(c.text), sec = Math.round(w/2.5);
   const m = el.querySelector(".meta");
-  m.textContent = c.pending ? "Reading text from the page…" : `${w} words · about ${sec} s read aloud${sec>10?" · longer than 10 s":""}`;
+  m.textContent = c.pending ? tx("reading") : tx("meta",{w, s:sec}) + (sec>10 ? tx("over10") : "");
   m.classList.toggle("over", sec>10);
   const f = el.querySelector(".final");
   const out = compose(c);
-  f.textContent = out || "Text will appear here";
+  f.textContent = out || tx("finalEmpty");
   f.classList.toggle("skeleton", !out);
 }
 const all = () => cards.concat(ownCard ? [ownCard] : []);
@@ -395,21 +466,21 @@ document.querySelectorAll("[data-all]").forEach(b => b.onclick = () => {
   const k = b.dataset.all, v = G.p[k] = !all().every(c=>c.p[k]); all().forEach(c=>c.p[k]=v); refreshAll();
 });
 $("#voiceAll").onclick = () => { const v = G.voice = !all().every(c=>c.voice); all().forEach(c=>c.voice=v); refreshAll(); };
-$("#undoAll").onclick = () => { all().forEach(c=>{c.text=c.original; refresh(c,true);}); toast("Original texts restored"); };
+$("#undoAll").onclick = () => { all().forEach(c=>{c.text=c.original; refresh(c,true);}); toast(tx("restored")); };
 $("#copyAll").onclick = () => {
   const t = cards.filter(c=>c.text.trim()).map(compose).join("\n\n");
-  if(!t) return toast("Load a book first");
+  if(!t) return toast(tx("loadFirst"));
   copyText(t);
 };
 async function batch(btn, makePrompt){
   const list = all().filter(c=>c.text.trim());
-  if(!list.length) return toast("No texts yet");
+  if(!list.length) return toast(tx("noTexts"));
   btn.classList.add("busy"); btn.disabled = true;
   try{
     const res = await askJSON(makePrompt(list.map(c=>c.text)));
     if(!Array.isArray(res) || res.length!==list.length) throw {code:"shape"};
     list.forEach((c,i)=>{ if(typeof res[i]==="string" && res[i].trim()){ c.text = res[i].trim(); refresh(c,true);} });
-    toast("Done");
+    toast(tx("done"));
   }catch(e){ toast(errText(e)); }
   finally{ btn.classList.remove("busy"); btn.disabled = false; }
 }
@@ -419,14 +490,14 @@ $("#trAll").onclick = e => batch(e.currentTarget, texts =>
   `Translate each children's storybook text in this JSON array into ${$("#lang").value}. Keep names, tone and meaning, natural for reading aloud.\nReply with only a JSON array of strings, same order and same length (${texts.length}).\n\n${JSON.stringify(texts)}`);
 $("#voiceGo").onclick = async e => {
   const b = e.currentTarget, idea = $("#voiceShort").value.trim();
-  if(!idea) { $("#voiceShort").focus(); return toast("Type a short voice idea first, like “child's voice”"); }
+  if(!idea) { $("#voiceShort").focus(); return toast(tx("voiceFirst")); }
   b.classList.add("busy"); b.disabled = true;
   try{
     voiceDesc = await ask(`Write a detailed voice direction for an off-screen voiceover narrator of a children's story video, based on this short idea: "${idea}".
 Describe in English, in 2-3 sentences: apparent age and gender, timbre, pitch, pace, emotion and energy, accent or language, clarity and how close to the microphone it sounds. It must work as a consistent voice spec repeated in every video prompt so all clips sound like the same person. No quotes, no lists. Reply with only the description.`, {cache:false});
     const vd = $("#voiceDesc"); vd.value = voiceDesc; vd.hidden = false; $("#voiceRow").hidden = false;
     G.voice = true; all().forEach(c=>c.voice=true); refreshAll();
-    toast("Voice added to all texts");
+    toast(tx("voiceAdded"));
   }catch(err){ toast(errText(err)); }
   finally{ b.classList.remove("busy"); b.disabled = false; }
 };
@@ -439,7 +510,7 @@ const drop = $("#drop");
 drop.addEventListener("drop", e => { const f = e.dataTransfer.files[0]; if(f) openPdf(f); });
 $("#file").addEventListener("change", e => { const f = e.target.files[0]; if(f) openPdf(f); e.target.value=""; });
 
-function setProg(frac, msg){ const p=$("#prog"); p.hidden=false; p.firstElementChild.style.width=(frac*100).toFixed(1)+"%"; $("#dropHint").textContent = msg; }
+function setProg(frac, msg){ $("#dropHint").removeAttribute("data-i18n"); const p=$("#prog"); p.hidden=false; p.firstElementChild.style.width=(frac*100).toFixed(1)+"%"; $("#dropHint").textContent = msg; }
 
 // Find the illustration box: everything that is not plain paper. Paper is light and colourless; text lines barely dent it.
 function findPicture(small){
@@ -490,18 +561,18 @@ async function readText(c, blob){
 }
 
 async function openPdf(file){
-  if(typeof pdfjsLib==="undefined") return toast("PDF reader didn't load. Reload the page");
+  if(typeof pdfjsLib==="undefined") return toast(tx("pdfFail"));
   cards.length = 0; $("#pages").innerHTML = "";
-  setProg(.02, `Opening ${file.name}…`);
+  setProg(.02, tx("opening",{name:file.name}));
   let pdf;
   try{
     const buf = await file.arrayBuffer();
     pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
     pdf = await pdfjsLib.getDocument({data:new Uint8Array(buf), isEvalSupported:false}).promise;
-  }catch(e){ setProg(0,"This file couldn't be opened as a PDF. Try exporting the book again."); return; }
+  }catch(e){ setProg(0,tx("badPdf")); return; }
   const n = pdf.numPages;
   for(let i=1;i<=n;i++){
-    setProg((i-.5)/n, `Splitting page ${i} of ${n}…`);
+    setProg((i-.5)/n, tx("splitting",{i,n}));
     const page = await pdf.getPage(i);
     const vp1 = page.getViewport({scale:1});
     const scale = Math.min(3.6, 2800/vp1.width);
@@ -524,8 +595,8 @@ async function openPdf(file){
       picBlob = await toBlob(big, "image/png");
       textCanvas = crop(big,0,0,1,1,1600);
     }
-    const label = i===1 && box && (box.x0>.2) ? "Cover" : `Page ${i}`;
-    const c = makeCard({index:i, label, blob:picBlob, text:""});
+    const labelKey = i===1 && box && (box.x0>.2) ? "cover" : "page";
+    const c = makeCard({index:i, labelKey, blob:picBlob, text:""});
     if(i===1) $("#emptyBook")?.remove();
     cards.push(c); $("#pages").appendChild(c.el);
     // new pages follow the "for all pages" switches
@@ -534,12 +605,28 @@ async function openPdf(file){
     big.width = big.height = 0;
     readText(c, tblob);
   }
-  setProg(1, `${n} pages split. Texts are being read by Claude Haiku.`);
+  setProg(1, tx("splitDone",{n}));
   refreshAll();
 }
 
+/* ---------- language switch ---------- */
+function fillLangSelect(){
+  const sel = $("#lang"), cur = sel.value || "English";
+  sel.innerHTML = LANGS.map(([v,ru]) => `<option value="${v}">${UI==="ru" ? ru : v}</option>`).join("");
+  sel.value = cur;
+}
+function setUI(l){
+  UI = l; try{ localStorage.setItem("uiLang", l); }catch(e){}
+  document.documentElement.lang = l;
+  document.querySelectorAll(".langsw button").forEach(b => b.setAttribute("aria-pressed", b.dataset.lang===l));
+  applyLang(); fillLangSelect();
+  if(typeof showKey==="function" && $("#keyBox")) try{ showKey(); }catch(e){}
+  all().forEach(c=>refresh(c));
+}
+document.querySelectorAll(".langsw button").forEach(b => b.onclick = () => setUI(b.dataset.lang));
+
 /* ---------- own text card ---------- */
-ownCard = makeCard({index:0, label:"Paste any text", blob:null, example:true,
+ownCard = makeCard({index:0, labelKey:"own", blob:null, example:true,
   text:"On a drizzly Tuesday afternoon, Pippin peered out the tall living room window. Beside him sat his best friend, Clover, her tail swishing gently as raindrops tapped against the glass."});
 $("#own").appendChild(ownCard.el);
 ownCard.el.querySelector("textarea").addEventListener("focus", function f(){ ownCard.el.querySelector(".ex")?.remove(); this.removeEventListener("focus", f); });
@@ -550,24 +637,23 @@ function showKey(){
   $("#keyBox").classList.toggle("ok", has);
   $("#keyForget").hidden = !has;
   $("#apiKey").value = "";
-  $("#apiKey").placeholder = has ? "Saved: sk-ant-…" + apiKey.slice(-4) : "sk-ant-...";
-  $("#keyState").textContent = has
-    ? "Key saved in this browser. Haiku reads the texts and runs the buttons with it."
-    : "Text reading, shortening, voice and translation run on Claude Haiku with your key. The key stays in this browser and goes only to Anthropic.";
+  $("#apiKey").placeholder = has ? tx("keySaved") + apiKey.slice(-4) : "sk-ant-...";
+  $("#keyState").textContent = has ? tx("keyOn") : tx("keyOff");
 }
 $("#keySave").onclick = async e => {
   const v = $("#apiKey").value.trim();
-  if(!v) return toast("Paste your key first");
-  if(!/^sk-ant-/.test(v)) return toast("A Claude key starts with sk-ant-");
+  if(!v) return toast(tx("keyPaste"));
+  if(!/^sk-ant-/.test(v)) return toast(tx("keyFormat"));
   const b = e.currentTarget, old = apiKey; apiKey = v;
   b.classList.add("busy"); b.disabled = true;
-  try{ await callApi("Reply with: ok"); try{ localStorage.setItem("claudeKey", v); }catch(_){} showKey(); toast("Key works and is saved"); }
+  try{ await callApi("Reply with: ok"); try{ localStorage.setItem("claudeKey", v); }catch(_){} showKey(); toast(tx("keyWorks")); }
   catch(err){ apiKey = old; toast(errText(err)); }
   finally{ b.classList.remove("busy"); b.disabled = false; }
 };
 $("#apiKey").addEventListener("keydown", e => { if(e.key==="Enter") $("#keySave").click(); });
-$("#keyForget").onclick = () => { apiKey = ""; try{ localStorage.removeItem("claudeKey"); }catch(_){} showKey(); toast("Key removed from this browser"); };
+$("#keyForget").onclick = () => { apiKey = ""; try{ localStorage.removeItem("claudeKey"); }catch(_){} showKey(); toast(tx("keyRemoved")); };
 showKey();
+setUI(UI);
 
 /* ---------- inside Claude: use the viewer's Claude if no key ---------- */
 (async () => {
