@@ -320,7 +320,7 @@ function makeCard({index, label, blob, text, example}){
       <textarea rows="5" aria-label="${label} text" id="t-${index}"></textarea>
       <div class="meta"></div>
       <div class="row">
-        <button data-a="copy" class="primary">Copy text</button>
+        <button data-a="copytext" class="primary">Copy text</button>
         <button data-a="short" class="ai">Shorten to 10 s</button>
         <button data-a="tr" class="ai">Translate</button>
         <button data-a="orig">Original</button>
@@ -347,6 +347,7 @@ function makeCard({index, label, blob, text, example}){
     if(b.dataset.t){ c[b.dataset.t] = !c[b.dataset.t]; return refresh(c); }
     const a = b.dataset.a;
     if(a==="copy") return copyText(compose(c), ta);
+    if(a==="copytext") return copyText(c.text, ta);
     if(a==="cimg") return copyImage(c.blob);
     if(a==="simg") return saveImage(c.blob, imgName);
     if(a==="orig"){ c.text = c.original; return refresh(c,true); }
