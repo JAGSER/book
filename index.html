@@ -214,11 +214,20 @@ const G = {veo:false, voice:false, p:{noNarrator:false,noMusic:false,manyScenes:
 let tt;
 function toast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");clearTimeout(tt);tt=setTimeout(()=>t.classList.remove("show"),2600);}
 function copyText(text, ta){
-  return navigator.clipboard.writeText(text).then(()=>toast("Text copied"),()=>{
-    if(ta){ta.focus();ta.select();} toast("Copy blocked here. Text is selected, press Ctrl+C");
-  });
+  const fallback = () => {
+    const t = document.createElement("textarea"); t.value = text; t.setAttribute("readonly","");
+    t.style.cssText = "position:fixed;top:0;left:0;width:1px;height:1px;opacity:0";
+    document.body.appendChild(t); t.select(); let ok = false;
+    try{ ok = document.execCommand("copy"); }catch(e){}
+    t.remove();
+    if(ok) toast("Text copied");
+    else { if(ta){ta.focus();ta.select();} toast("Copy blocked here. Text is selected, press Ctrl+C"); }
+  };
+  if(navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(()=>toast("Text copied"), fallback);
+  else fallback();
 }
 function copyImage(blob){
+  if(!(navigator.clipboard && window.isSecureContext && window.ClipboardItem)) return toast("Right-click the picture and choose Copy image");
   try{
     const item = new ClipboardItem({"image/png": blob});
     navigator.clipboard.write([item]).then(()=>toast("Picture copied"),()=>toast("Copy blocked here. Right-click the picture and choose Copy image"));
